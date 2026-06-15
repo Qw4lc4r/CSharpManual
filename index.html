@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Manual — Электронное интерактивное пособие</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #123c8c, #2d7dd2);
+            --dark-blue: #123c8c;
+            --light-blue: #2d7dd2;
+            --accent-green: #38b464;
+            --accent-orange: #dc6e32;
+            --bg-color: #f4f7fa;
+            --card-bg: #ffffff;
+            --text-main: #323741;
+            --text-muted: #64748b;
+            --radius: 16px;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Шапка сайта */
+        header {
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--light-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--light-blue);
+        }
+
+        /* Hero Секция */
+        .hero {
+            background: var(--primary-gradient);
+            color: #ffffff;
+            padding: 90px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декоративные круги как на форме авторизации */
+        .hero .circle-1 {
+            position: absolute; width: 300px; height: 300px; background: rgba(255,255,255,0.04); border-radius: 50%; top: -100px; left: -100px;
+        }
+        .hero .circle-2 {
+            position: absolute; width: 250px; height: 250px; background: rgba(255,255,255,0.03); border-radius: 50%; bottom: -80px; right: -50px;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            color: var(--dark-blue);
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-github:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+        }
+
+        /* Секция преимуществ */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 90px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--dark-blue);
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(18,60,140,0.06);
+        }
+
+        .feature-icon {
+            width: 54px;
+            height: 54px;
+            background: rgba(45, 125, 210, 0.08);
+            color: var(--light-blue);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 24px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 14px;
+            font-size: 1.3rem;
+            color: #1e293b;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.98rem;
+        }
+
+        /* Презентация интерфейса */
+        .screenshots {
+            background: #edf2f7;
+        }
+
+        .screen-showcase {
+            display: flex;
+            flex-direction: column;
+            gap: 80px;
+            margin-top: 20px;
+        }
+
+        .screen-item {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .screen-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .screen-img-wrapper {
+            flex: 1.2;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.07);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .screen-img-wrapper img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+        }
+
+        .screen-text {
+            flex: 0.8;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(45, 125, 210, 0.08);
+            color: var(--light-blue);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tech-badge.green {
+            background: rgba(56, 180, 100, 0.08);
+            color: var(--accent-green);
+        }
+
+        .tech-badge.orange {
+            background: rgba(220, 110, 50, 0.08);
+            color: var(--accent-orange);
+        }
+
+        .screen-text h3 {
+            font-size: 1.75rem;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .screen-text p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+        }
+
+        /* Интерактивный паттерн в точку для блока Профиля */
+        .profile-dots-bg {
+            position: relative;
+        }
+        .profile-dots-bg::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(45, 125, 210, 0.06) 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            pointer-events: none;
+            border-radius: var(--radius);
+        }
+
+        /* Спецификации / Стек */
+        .tech-specs {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .spec-item {
+            text-align: center;
+            padding: 25px;
+            background: var(--bg-color);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .spec-item i {
+            font-size: 2rem;
+            color: var(--light-blue);
+            margin-bottom: 15px;
+        }
+
+        .spec-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #1e293b;
+        }
+
+        .spec-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Подвал */
+        footer {
+            background: #0f172a;
+            color: #ffffff;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        footer p {
+            opacity: 0.6;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        footer .credits {
+            font-size: 0.85rem;
+            opacity: 0.4;
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 992px) {
+            .screen-item, .screen-item:nth-child(even) {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .screen-text {
+                text-align: center;
+            }
+            .badge-container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2.3rem; }
+            .hero p { font-size: 1.1rem; }
+            .section { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-code"></i> C# Manual
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Преимущества</a></li>
+                <li><a href="#screens">Интерфейс</a></li>
+                <li><a href="#tech">Стек технологий</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="circle-1"></div>
+        <div class="circle-2"></div>
+        <div class="hero-content">
+            <h1>Интерактивное учебное пособие по C#</h1>
+            <p>Персональный настольный тренажер программирования со встроенной динамической компиляцией, автоматической проверкой задач и облачной синхронизацией прогресса.</p>
+            <a href="https://github.com" target="_blank" class="btn-github">
+                <i class="fa-brands fa-github"></i> Исходный код на GitHub
+            </a>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <h2 class="section-title">Ключевые возможности</h2>
+        <p class="section-subtitle">Всё необходимое для комфортного изучения языка в единой экосистеме</p>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Мгновенный запуск кода</h3>
+                <p>Пишите решения задач прямо внутри приложения. Никаких тяжелых сред разработки для старта — код компилируется «на лету».</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-user-shield"></i></div>
+                <h3>Безопасная авторизация</h3>
+                <p>Привязка сессии к идентификатору устройства (MachineGuid) обеспечивает автоматический вход без необходимости постоянного ввода пароля.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-cloud-sun"></i></div>
+                <h3>Удаленный профиль</h3>
+                <p>Благодаря интеграции с облачной базой Supabase, ваш прогресс, настройки и аватар надежно защищены и синхронизированы.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section screenshots" id="screens">
+        <h2 class="section-title">Интерфейс приложения</h2>
+        <p class="section-subtitle">Продуманный дизайн панелей и удобное разделение рабочих областей</p>
+        
+        <div class="screen-showcase">
+            
+            <div class="screen-item">
+                <div class="screen-img-wrapper">
+                    <img src="img/auth.png" alt="Окно авторизации" onerror="this.src='https://placehold.co/700x420/123c8c/ffffff?text=Auth+Form'">
+                </div>
+                <div class="screen-text">
+                    <div class="badge-container">
+                        <span class="tech-badge">Guna UI</span>
+                        <span class="tech-badge">Session Cache</span>
+                    </div>
+                    <h3>Авторизация и регистрация</h3>
+                    <p>Плавный интерфейс переключения между экранами входа и создания нового аккаунта. Реализовано сохранение сессии в локальный конфигурационный файл `session.cfg` для быстрого доступа.</p>
+                </div>
+            </div>
+
+            <div class="screen-item">
+                <div class="screen-img-wrapper">
+                    <img src="img/main.png" alt="Главное меню" onerror="this.src='https://placehold.co/700x420/2d7dd2/ffffff?text=Main+Form'">
+                </div>
+                <div class="screen-text">
+                    <div class="badge-container">
+                        <span class="tech-badge orange">Flow Layout</span>
+                        <span class="tech-badge">Custom Cards</span>
+                    </div>
+                    <h3>Тематические разделы</h3>
+                    <p>Главный экран предлагает структурированный каталог тем: от базового синтаксиса до объектно-ориентированного программирования и коллекций. Каждая карточка снабжена уникальным цветовым акцентом.</p>
+                </div>
+            </div>
+
+            <div class="screen-item">
+                <div class="screen-img-wrapper">
+                    <img src="img/lesson.png" alt="Окно урока и редактор кода" onerror="this.src='https://placehold.co/700x420/1a202c/ffffff?text=Lesson+Form'">
+                </div>
+                <div class="screen-text">
+                    <div class="badge-container">
+                        <span class="tech-badge">Roslyn API</span>
+                        <span class="tech-badge green">Syntax Highlighting</span>
+                    </div>
+                    <h3>Интерактивная среда обучения</h3>
+                    <p>Рабочая зона разделена на три логических блока: теоретический блок (слева), окно полноценного редактора кода с подсветкой синтаксиса C# (справа сверху) и интерактивная консоль для вывода результатов компиляции и ошибок (справа снизу).</p>
+                </div>
+            </div>
+
+            <div class="screen-item profile-dots-bg">
+                <div class="screen-img-wrapper">
+                    <img src="img/profile.png" alt="Профиль пользователя" onerror="this.src='https://placehold.co/700x420/edf2f7/123c8c?text=Profile+Form'">
+                </div>
+                <div class="screen-text">
+                    <div class="badge-container">
+                        <span class="tech-badge">Supabase Storage</span>
+                        <span class="tech-badge orange">Custom Paint</span>
+                    </div>
+                    <h3>Личный кабинет студента</h3>
+                    <p>Экран управления профилем отображает статистику успеваемости с помощью кастомного скругленного индикатора (ProgressBar). Задний фон динамически отрисовывает аккуратный точечный паттерн, подчеркивая индивидуальный стиль интерфейса.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section tech-specs" id="tech">
+        <h2 class="section-title">Технический стек проекта</h2>
+        <p class="section-subtitle">Архитектура и используемые библиотеки (из раздела «О программе» — image_862480.png)</p>
+        
+        <div class="specs-grid">
+            <div class="spec-item">
+                <i class="fa-solid fa-cubes"></i>
+                <h4>.NET / C#</h4>
+                <p>Windows Forms с кастомными double-buffered компонентами.</p>
+            </div>
+            <div class="spec-item">
+                <i class="fa-solid fa-database"></i>
+                <h4>Supabase REST API</h4>
+                <p>Облачная СУБД для хранения прогресса, учетных записей и аватаров.</p>
+            </div>
+            <div class="spec-item">
+                <i class="fa-solid fa-terminal"></i>
+                <h4>Microsoft.CodeAnalysis</h4>
+                <p>Компилятор Roslyn для динамической сборки кода в памяти.</p>
+            </div>
+            <div class="spec-item">
+                <i class="fa-solid fa-font"></i>
+                <h4>FastColoredTextBox</h4>
+                <p>Компонент текстового поля со встроенной подсветкой ключевых слов C#.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 C# Manual — Электронное интерактивное пособие.</p>
+        <p class="credits">Разработано в рамках выпускной квалификационной работы (дипломного проекта)</p>
+    </footer>
+
+</body>
+</html>
