@@ -1,0 +1,1 @@
+"C# Manual" is a cross-platform software that provides an interactive learning environment designed with a client-server architecture, modern UI frameworks, and a cloud database for managing content and user progress.
