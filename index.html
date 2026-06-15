@@ -534,6 +534,21 @@
         <p>&copy; 2026 C# Manual — Электронное интерактивное пособие.</p>
         <p class="credits">Разработано в рамках выпускной квалификационной работы (дипломного проекта)</p>
     </footer>
+<script>
+    const baseImgUrl = "https://qw4lc4r.github.io/CSharpManual/img/";
 
+    // Циклическая смена картинок для Auth Form (1.jpg <-> 2.jpg)
+    const authImg = document.querySelector('.screen-item:nth-child(1) .screen-img-wrapper img');
+    let authIndex = 1;
+    setInterval(() => {
+        authIndex = authIndex === 1 ? 2 : 1;
+        authImg.src = baseImgUrl + authIndex + ".jpg";
+    }, 2000);
+
+    // Статичные картинки для остальных блоков (3, 4, 5)
+    document.querySelector('.screen-item:nth-child(2) .screen-img-wrapper img').src = baseImgUrl + "3.jpg";
+    document.querySelector('.screen-item:nth-child(3) .screen-img-wrapper img').src = baseImgUrl + "4.jpg";
+    document.querySelector('.screen-item:nth-child(4) .screen-img-wrapper img').src = baseImgUrl + "5.jpg";
+</script>
 </body>
 </html>
