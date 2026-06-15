@@ -123,7 +123,6 @@ namespace CSharpDesctop.Forms
 
         private void LoadUserAvatar()
         {
-            MessageBox.Show(UserSession.AvatarUrl);
             
             if (!string.IsNullOrEmpty(UserSession.AvatarUrl))
             {
