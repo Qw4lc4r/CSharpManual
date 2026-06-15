@@ -11,7 +11,7 @@ namespace CSharpDesctop.Forms
 {
     public partial class AdminForm : Form
     {
-        // ── State ──────────────────────────────────────────────────────────────
+        
         private List<ChapterModel> _chapters = new();
         private List<TopicModel> _topics = new();
         private List<LessonModel> _lessons = new();
@@ -22,16 +22,16 @@ namespace CSharpDesctop.Forms
         private LessonModel? _selLesson;
         private CodeBlockModel? _selCodeBlock;
 
-        // ══════════════════════════════════════════════════════════════════════
+        
         public AdminForm()
         {
             InitializeComponent();
             tabMain.DrawItem += TabMain_DrawItem;
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  Custom tab header drawing
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private void TabMain_DrawItem(object? sender, DrawItemEventArgs e)
         {
             bool sel = e.Index == tabMain.SelectedIndex;
@@ -44,42 +44,42 @@ namespace CSharpDesctop.Forms
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  FORM LOAD
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private async void AdminForm_Load(object sender, EventArgs e) =>
             await RefreshAllAsync();
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  DATA LOADING
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private async Task RefreshAllAsync()
         {
             _chapters = await DatabaseHelper.GetChaptersAsync() ?? new();
             _topics = await DatabaseHelper.GetAllTopicsAsync() ?? new();
             _lessons = await DatabaseHelper.GetAllLessonsAsync() ?? new();
 
-            // Chapters list
+            
             lstChapters.DataSource = null;
             lstChapters.DataSource = _chapters;
             lstChapters.DisplayMember = "Title";
             lstChapters.ValueMember = "Id";
 
-            // Chapter filter (Topics tab)
+            
             var chapSrc = new List<ChapterModel>(_chapters);
             chapSrc.Insert(0, new ChapterModel { Id = Guid.Empty, Title = "— выберите главу —" });
             cmbTopicChapter.DataSource = chapSrc;
             cmbTopicChapter.DisplayMember = "Title";
             cmbTopicChapter.ValueMember = "Id";
 
-            // Topic filter (Lessons tab)
+            
             var topSrc = new List<TopicModel>(_topics);
             topSrc.Insert(0, new TopicModel { Id = Guid.Empty, Title = "— выберите тему —" });
             cmbLessonTopic.DataSource = topSrc;
             cmbLessonTopic.DisplayMember = "Title";
             cmbLessonTopic.ValueMember = "Id";
 
-            // Lesson filter (CodeBlocks tab)
+            
             var lesSrc = new List<LessonModel>(_lessons);
             lesSrc.Insert(0, new LessonModel { Id = Guid.Empty, Title = "— выберите урок —" });
             cmbCodeLesson.DataSource = lesSrc;
@@ -128,9 +128,9 @@ namespace CSharpDesctop.Forms
             ClearCodeFields();
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  EVENT HANDLERS — LIST SELECTION
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private void lstChapters_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selChapter = lstChapters.SelectedItem as ChapterModel;
@@ -169,7 +169,7 @@ namespace CSharpDesctop.Forms
             numCodeOrder.Value = _selCodeBlock.OrderIndex;
         }
 
-        // ── FILTER COMBOS ─────────────────────────────────────────────────────
+        
         private async void cmbTopicChapter_SelectedIndexChanged(object sender, EventArgs e) =>
             await TopicsLoadAsync();
 
@@ -179,11 +179,11 @@ namespace CSharpDesctop.Forms
         private async void cmbCodeLesson_SelectedIndexChanged(object sender, EventArgs e) =>
             await CodeBlocksLoadAsync();
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  EVENT HANDLERS — BUTTONS
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
 
-        // ── Chapters ──────────────────────────────────────────────────────────
+        
         private async void btnChAdd_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtChTitle.Text)) { Warn("Введите название главы."); return; }
@@ -219,7 +219,7 @@ namespace CSharpDesctop.Forms
             await RefreshAllAsync();
         }
 
-        // ── Topics ────────────────────────────────────────────────────────────
+        
         private async void btnTopAdd_Click(object sender, EventArgs e)
         {
             if (cmbTopicChapter.SelectedItem is not ChapterModel ch || ch.Id == Guid.Empty)
@@ -256,7 +256,7 @@ namespace CSharpDesctop.Forms
             await TopicsLoadAsync();
         }
 
-        // ── Lessons ───────────────────────────────────────────────────────────
+        
         private async void btnLesAdd_Click(object sender, EventArgs e)
         {
             if (cmbLessonTopic.SelectedItem is not TopicModel tp || tp.Id == Guid.Empty)
@@ -293,7 +293,7 @@ namespace CSharpDesctop.Forms
             await LessonsLoadAsync();
         }
 
-        // ── Code Blocks ───────────────────────────────────────────────────────
+        
         private async void btnCodeAdd_Click(object sender, EventArgs e)
         {
             if (cmbCodeLesson.SelectedItem is not LessonModel ls || ls.Id == Guid.Empty)
@@ -332,9 +332,9 @@ namespace CSharpDesctop.Forms
             await CodeBlocksLoadAsync();
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  CLEAR FIELD HELPERS
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private void ClearChapterFields()
         {
             txtChTitle.Clear(); txtChDesc.Clear(); txtChCoverUrl.Clear();
@@ -356,9 +356,9 @@ namespace CSharpDesctop.Forms
             txtLang.Text = "csharp"; numCodeOrder.Value = 0; _selCodeBlock = null;
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  NAVIGATION
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private void btnBackToMain_Click(object sender, EventArgs e)
         {
             var main = Application.OpenForms["MainForm"];
@@ -374,9 +374,9 @@ namespace CSharpDesctop.Forms
             this.Close();
         }
 
-        // ══════════════════════════════════════════════════════════════════════
-        //  DIALOG HELPERS
-        // ══════════════════════════════════════════════════════════════════════
+        
+        
+        
         private static void Warn(string msg) =>
             MessageBox.Show(msg, "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         private static void Info(string msg) =>
@@ -385,9 +385,9 @@ namespace CSharpDesctop.Forms
             MessageBox.Show(msg, "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  Gradient top bar
-    // ══════════════════════════════════════════════════════════════════════════
+    
+    
+    
     internal class AdminTopBar : Panel
     {
         public AdminTopBar()
