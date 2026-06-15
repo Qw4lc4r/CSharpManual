@@ -203,7 +203,12 @@ namespace CSharpDesctop.Forms
                 MessageBox.Show("Поле 'Имя' не может быть пустым.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
+            if (newName == UserSession.Name && newEmail == UserSession.Email)
+            {
+                MessageBox.Show("Данные не изменились — изменять нечего.", "Информация",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             btnSaveChanges.Enabled = false;
             bool success = await DatabaseHelper.UpdateUserProfileAsync(newName, newEmail);
 
@@ -280,7 +285,7 @@ namespace CSharpDesctop.Forms
             if (prompt.ShowDialog() == DialogResult.OK)
             {
                 string newPassword = textBox.Text.Trim();
-                if (newPassword.Length < 4)
+                if (newPassword.Length < 8)
                 {
                     MessageBox.Show("Пароль слишком короткий (минимум 4 символа)!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;

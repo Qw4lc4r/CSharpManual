@@ -274,7 +274,7 @@ namespace CSharpDesctop.Forms
             roundedButton1.FlatStyle = FlatStyle.Flat;
             roundedButton1.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             roundedButton1.ForeColor = Color.White;
-            roundedButton1.Location = new Point(18, 735);
+            roundedButton1.Location = new Point(18, 714);
             roundedButton1.Name = "roundedButton1";
             roundedButton1.ShowShadow = true;
             roundedButton1.Size = new Size(388, 44);
@@ -286,7 +286,7 @@ namespace CSharpDesctop.Forms
             // ProfileForm
             // 
             BackColor = Color.FromArgb(244, 247, 251);
-            ClientSize = new Size(424, 782);
+            ClientSize = new Size(424, 776);
             Controls.Add(roundedButton1);
             Controls.Add(pnlHeaderCard);
             Controls.Add(pnlStatsCard);

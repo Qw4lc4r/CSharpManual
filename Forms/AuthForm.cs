@@ -17,6 +17,7 @@ namespace CSharpDesctop.Forms
         private int _animationStep = 0;
         private const int TotalSteps = 54;
 
+
         public AuthForm()
         {
             InitializeComponent();
@@ -127,12 +128,39 @@ namespace CSharpDesctop.Forms
 
         private async void btnRegisterSubmit_Click(object sender, EventArgs e)
         {
-            if (txtRegPassword.Text != txtRegPasswordConfirm.Text)
+            string login = txtRegLogin.Text.Trim();
+            string name = txtRegName.Text.Trim();
+            string email = txtRegEmail.Text.Trim();
+            string password = txtRegPassword.Text;
+            string confirm = txtRegPasswordConfirm.Text;
+
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email))
             {
-                MessageBox.Show("Пароли не совпадают!");
+                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (await DatabaseHelper.RegisterAsync(txtRegLogin.Text, txtRegName.Text, txtRegEmail.Text, txtRegPassword.Text))
+
+
+
+            if (!IsValidEmail(email))
+            {
+                MessageBox.Show("Введите корректный email!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (password.Length < 8)
+            {
+                MessageBox.Show("Пароль должен быть не менее 8 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (password != confirm)
+            {
+                MessageBox.Show("Пароли не совпадают!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (await DatabaseHelper.RegisterAsync(login, name, email, password))
             {
                 MessageBox.Show("Регистрация успешна!");
                 lblLoginLink_Click(this, EventArgs.Empty);
@@ -148,6 +176,63 @@ namespace CSharpDesctop.Forms
             UserSession.IsAdmin = false;
             OpenMainForm();
         }
+
+
+
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email
+                    && System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void txtRegPassword_TextChanged(object sender, EventArgs e)
+        {
+            string pwd = txtRegPassword.Text;
+            int score = GetPasswordStrength(pwd);
+
+            int maxWidth = pnlPasswordStrength.Width;
+            int fillWidth = pwd.Length == 0 ? 0 : maxWidth * (score + 1) / 5;
+            pbStrengthFill.Width = Math.Min(fillWidth, maxWidth);
+
+            Color color;
+            string label;
+            switch (score)
+            {
+                case 0: color = Color.FromArgb(220, 50, 50); label = "Очень слабый"; break;
+                case 1: color = Color.FromArgb(230, 120, 40); label = "Слабый"; break;
+                case 2: color = Color.FromArgb(230, 180, 40); label = "Средний"; break;
+                case 3: color = Color.FromArgb(120, 190, 60); label = "Хороший"; break;
+                default: color = Color.FromArgb(40, 170, 80); label = "Сильный"; break;
+            }
+
+            pbStrengthFill.BackColor = color;
+            lblStrengthText.Text = pwd.Length == 0 ? "" : $"Сложность: {label}";
+            lblStrengthText.ForeColor = color;
+        }
+
+        private static int GetPasswordStrength(string pwd)
+        {
+            if (string.IsNullOrEmpty(pwd)) return 0;
+
+            int score = 0;
+            if (pwd.Length >= 8) score++;
+            if (pwd.Length >= 12) score++;
+            if (System.Text.RegularExpressions.Regex.IsMatch(pwd, @"[a-z]") &&
+                System.Text.RegularExpressions.Regex.IsMatch(pwd, @"[A-Z]")) score++;
+            if (System.Text.RegularExpressions.Regex.IsMatch(pwd, @"\d")) score++;
+            if (System.Text.RegularExpressions.Regex.IsMatch(pwd, @"[^a-zA-Z0-9]")) score++;
+
+            return Math.Min(score, 4);
+        }
+
         private string GetMachineGuid()
         {
             try

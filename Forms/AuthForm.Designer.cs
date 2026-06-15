@@ -24,6 +24,9 @@ namespace CSharpDesctop.Forms
         private System.Windows.Forms.Button btnRegisterSubmit;
         private System.Windows.Forms.Label lblLoginLink;
         private System.Windows.Forms.Timer tmrAnimation;
+        private System.Windows.Forms.Panel pnlPasswordStrength;
+        private System.Windows.Forms.Panel pbStrengthFill;
+        private System.Windows.Forms.Label lblStrengthText;
 
         protected override void Dispose(bool disposing)
         {
@@ -154,7 +157,7 @@ namespace CSharpDesctop.Forms
             // REGISTER CARD
             pnlRegisterCard = new RoundedCard
             {
-                Size = new Size(360, 510),
+                Size = new Size(360, 530),
                 Location = new Point(30, 30),
                 Visible = false
             };
@@ -171,7 +174,7 @@ namespace CSharpDesctop.Forms
             label5 = MakeFieldLabel("Логин", new Point(24, 65));
             txtRegLogin = MakeTextBox(new Point(24, 83), 312);
 
-            label6 = MakeFieldLabel("Имя и фамилия", new Point(24, 119));
+            label6 = MakeFieldLabel("Имя", new Point(24, 119));
             txtRegName = MakeTextBox(new Point(24, 137), 312);
 
             label7 = MakeFieldLabel("Email", new Point(24, 172));
@@ -180,14 +183,38 @@ namespace CSharpDesctop.Forms
             label8 = MakeFieldLabel("Пароль", new Point(24, 225));
             txtRegPassword = MakeTextBox(new Point(24, 243), 312);
             txtRegPassword.UseSystemPasswordChar = true;
+            txtRegPassword.TextChanged += txtRegPassword_TextChanged;
 
-            label9 = MakeFieldLabel("Подтвердите пароль", new Point(24, 279));
-            txtRegPasswordConfirm = MakeTextBox(new Point(24, 297), 270);
+            pnlPasswordStrength = new Panel
+            {
+                Location = new Point(24, 272),
+                Size = new Size(312, 4),
+                BackColor = Color.FromArgb(225, 228, 235)
+            };
+            pbStrengthFill = new Panel
+            {
+                Location = new Point(0, 0),
+                Size = new Size(0, 4),
+                BackColor = Color.FromArgb(220, 50, 50)
+            };
+            pnlPasswordStrength.Controls.Add(pbStrengthFill);
+
+            lblStrengthText = new Label
+            {
+                Text = "",
+                Font = new Font("Segoe UI", 8F),
+                ForeColor = Color.FromArgb(130, 140, 160),
+                AutoSize = true,
+                Location = new Point(24, 280)
+            };
+
+            label9 = MakeFieldLabel("Подтвердите пароль", new Point(24, 299));
+            txtRegPasswordConfirm = MakeTextBox(new Point(24, 317), 270);
             txtRegPasswordConfirm.UseSystemPasswordChar = true;
 
             button1 = new Button
             {
-                Location = new Point(298, 297),
+                Location = new Point(298, 317),
                 Size = new Size(38, 26),
                 Text = "👁",
                 FlatStyle = FlatStyle.Flat,
@@ -200,7 +227,7 @@ namespace CSharpDesctop.Forms
             button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(220, 228, 240);
             button1.Click += button1_Click;
 
-            btnRegisterSubmit = MakePrimaryButton("Зарегистрироваться", new Point(24, 340), 312);
+            btnRegisterSubmit = MakePrimaryButton("Зарегистрироваться", new Point(24, 360), 312);
             btnRegisterSubmit.Click += btnRegisterSubmit_Click;
 
             lblLoginLink = new Label
@@ -209,14 +236,14 @@ namespace CSharpDesctop.Forms
                 ForeColor = Color.FromArgb(45, 125, 210),
                 Font = new Font("Segoe UI", 9F, FontStyle.Underline),
                 AutoSize = true,
-                Location = new Point(96, 400),
+                Location = new Point(96, 420),
                 Cursor = Cursors.Hand
             };
             lblLoginLink.Click += lblLoginLink_Click;
 
             pnlRegisterCard.Controls.AddRange(new Control[] {
                 label4, label5, txtRegLogin, label6, txtRegName, label7, txtRegEmail,
-                label8, txtRegPassword, label9, txtRegPasswordConfirm, button1,
+                label8, txtRegPassword, pnlPasswordStrength, lblStrengthText, label9, txtRegPasswordConfirm, button1,
                 btnRegisterSubmit, lblLoginLink
             });
 
