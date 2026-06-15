@@ -671,5 +671,230 @@ namespace CSharpDesctop.Services
             }
             catch { return false; }
         }
+        public static async Task<bool> InsertChapterAsync(ChapterModel m)
+        {
+            try
+            {
+                var body = new { id = m.Id, title = m.Title, description = m.Description, cover_url = m.CoverUrl, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/chapters";
+                var response = await SendRequestAsync(HttpMethod.Post, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> UpdateChapterAsync(ChapterModel m)
+        {
+            try
+            {
+                var body = new { title = m.Title, description = m.Description, cover_url = m.CoverUrl, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/chapters?id=eq.{m.Id}";
+                var response = await SendRequestAsync(HttpMethod.Patch, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> DeleteChapterAsync(Guid id)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/chapters?id=eq.{id}";
+                var response = await SendRequestAsync(HttpMethod.Delete, url);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        // ─────────────────── ТЕМЫ (TOPICS) ───────────────────
+        public static async Task<List<TopicModel>> GetTopicsByChapterAsync(Guid chapterId)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/topics?chapter_id=eq.{chapterId}&order=order_index.asc";
+                string jsonResponse = await SendRequestAsync(HttpMethod.Get, url);
+                if (string.IsNullOrEmpty(jsonResponse) || jsonResponse.Trim() == "[]") return new List<TopicModel>();
+                return JsonSerializer.Deserialize<List<TopicModel>>(jsonResponse) ?? new List<TopicModel>();
+            }
+            catch { return new List<TopicModel>(); }
+        }
+
+        public static async Task<bool> InsertTopicAsync(TopicModel m)
+        {
+            try
+            {
+                var body = new { id = m.Id, chapter_id = m.ChapterId, title = m.Title, description = m.Description, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/topics";
+                var response = await SendRequestAsync(HttpMethod.Post, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> UpdateTopicAsync(TopicModel m)
+        {
+            try
+            {
+                var body = new { title = m.Title, description = m.Description, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/topics?id=eq.{m.Id}";
+                var response = await SendRequestAsync(HttpMethod.Patch, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> DeleteTopicAsync(Guid id)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/topics?id=eq.{id}";
+                var response = await SendRequestAsync(HttpMethod.Delete, url);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        // ─────────────────── УРОКИ (LESSONS) ───────────────────
+        public static async Task<List<LessonModel>> GetAllLessonsAsync()
+        {
+            try
+            {
+                string url = $"{BaseUrl}/lessons?order=order_index.asc";
+                string jsonResponse = await SendRequestAsync(HttpMethod.Get, url);
+                if (string.IsNullOrEmpty(jsonResponse) || jsonResponse.Trim() == "[]") return new List<LessonModel>();
+                return JsonSerializer.Deserialize<List<LessonModel>>(jsonResponse) ?? new List<LessonModel>();
+            }
+            catch { return new List<LessonModel>(); }
+        }
+
+        public static async Task<bool> InsertLessonAsync(LessonModel m)
+        {
+            try
+            {
+                var body = new { id = m.Id, topic_id = m.TopicId, title = m.Title, content_html = m.ContentHtml, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/lessons";
+                var response = await SendRequestAsync(HttpMethod.Post, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> UpdateLessonAsync(LessonModel m)
+        {
+            try
+            {
+                var body = new { title = m.Title, content_html = m.ContentHtml, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/lessons?id=eq.{m.Id}";
+                var response = await SendRequestAsync(HttpMethod.Patch, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> DeleteLessonAsync(Guid id)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/lessons?id=eq.{id}";
+                var response = await SendRequestAsync(HttpMethod.Delete, url);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        // ─────────────────── ЗАДАНИЯ (CODE BLOCKS) ───────────────────
+        public static async Task<List<CodeBlockModel>> GetAllCodeBlocksAsync()
+        {
+            try
+            {
+                string url = $"{BaseUrl}/code_blocks?order=order_index.asc"; // Если в бд таблица называется code_blocks, замени на code_blocks
+                string jsonResponse = await SendRequestAsync(HttpMethod.Get, url);
+                if (string.IsNullOrEmpty(jsonResponse) || jsonResponse.Trim() == "[]") return new List<CodeBlockModel>();
+                return JsonSerializer.Deserialize<List<CodeBlockModel>>(jsonResponse) ?? new List<CodeBlockModel>();
+            }
+            catch { return new List<CodeBlockModel>(); }
+        }
+
+        public static async Task<bool> InsertCodeBlockAsync(CodeBlockModel m)
+        {
+            try
+            {
+                var body = new { id = m.Id, lesson_id = m.LessonId, code = m.Code, expected_output = m.ExpectedOutput, language = m.Language, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/code_blocks";
+                var response = await SendRequestAsync(HttpMethod.Post, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> UpdateCodeBlockAsync(CodeBlockModel m)
+        {
+            try
+            {
+                var body = new { code = m.Code, expected_output = m.ExpectedOutput, language = m.Language, order_index = m.OrderIndex };
+                string jsonBody = JsonSerializer.Serialize(body);
+                string url = $"{BaseUrl}/code_blocks?id=eq.{m.Id}";
+                var response = await SendRequestAsync(HttpMethod.Patch, url, jsonBody);
+                return response != null;
+            }
+            catch { return false; }
+        }
+
+        public static async Task<bool> DeleteCodeBlockAsync(Guid id)
+        {
+            try
+            {
+                string url = $"{BaseUrl}/code_blocks?id=eq.{id}";
+                var response = await SendRequestAsync(HttpMethod.Delete, url);
+                return response != null;
+            }
+            catch { return false; }
+        }
+        public static async Task<List<LessonModel>> GetLessonsByTopicAsync(Guid topicId)
+        {
+            // Используем твой BaseUrl и явный выбор полей (select) для надежности десериализации
+            string url = $"{BaseUrl}/lessons?topic_id=eq.{topicId}&select=id,topic_id,title,content_html,order_index,created_at&order=order_index.asc";
+            string json = await SendRequestAsync(HttpMethod.Get, url);
+
+            if (!string.IsNullOrEmpty(json) && json != "[]")
+            {
+                try
+                {
+                    return JsonSerializer.Deserialize<List<LessonModel>>(json) ?? new List<LessonModel>();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[DatabaseHelper Error] Ошибка парсинга уроков: {ex.Message}");
+                }
+            }
+            return new List<LessonModel>();
+        }
+
+        public static async Task<List<CodeBlockModel>> GetCodeBlocksByLessonAsync(Guid lessonId)
+        {
+            // Имя таблицы берём 'code_blocks', так как оно используется у тебя в реляционном запросе GetLessonContentAsync
+            string url = $"{BaseUrl}/code_blocks?lesson_id=eq.{lessonId}&select=id,lesson_id,code,expected_output,language,order_index,created_at&order=order_index.asc";
+            string json = await SendRequestAsync(HttpMethod.Get, url);
+
+            if (!string.IsNullOrEmpty(json) && json != "[]")
+            {
+                try
+                {
+                    return JsonSerializer.Deserialize<List<CodeBlockModel>>(json) ?? new List<CodeBlockModel>();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[DatabaseHelper Error] Ошибка парсинга блоков кода: {ex.Message}");
+                }
+            }
+            return new List<CodeBlockModel>();
+        }
     }
 }

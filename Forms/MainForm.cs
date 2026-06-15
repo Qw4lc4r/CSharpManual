@@ -233,7 +233,10 @@ namespace CSharpDesctop.Forms
                 }
             }
         }
-        private void btnAdminPanel_Click(object sender, EventArgs e) => MessageBox.Show("Доступ к CRUD-операциям таблиц БД разрешен.", "Панель администратора");
+        private void btnAdminPanel_Click(object sender, EventArgs e)
+        {
+            new AdminForm().Show();
+        }
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Application.Exit();
 
         private async void MainForm_Load(object sender, EventArgs e)
