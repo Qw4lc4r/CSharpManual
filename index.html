@@ -560,16 +560,16 @@
     </footer>
 <script>
     const baseImgUrl = "https://qw4lc4r.github.io/CSharpManual/img/";
-
+    document.querySelector('.screen-item:nth-child(1) .screen-img-wrapper img').src = baseImgUrl + "1.jpg";
     const authImg = document.querySelector('.screen-item:nth-child(1) .screen-img-wrapper img');
     authImg.classList.add('auth-slide-img');
     authImg.parentElement.classList.add('auth-slide-wrapper');
-
+    
     let authIndex = 1;
     setInterval(() => {
         // 1. Текущая картинка уезжает влево
         authImg.classList.add('slide-out');
-
+        
         setTimeout(() => {
             // 2. Меняем src и ставим картинку справа за пределами экрана (без анимации)
             authIndex = authIndex === 1 ? 2 : 1;
