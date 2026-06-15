@@ -14,19 +14,19 @@
 
         private void InitializeComponent()
         {
-            
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminForm));
             this.pnlTopBar = new AdminTopBar();
             this.lblAdminTitle = new System.Windows.Forms.Label();
             this.btnBackToMain = new System.Windows.Forms.Button();
 
-            
+
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabChapters = new System.Windows.Forms.TabPage();
             this.tabTopics = new System.Windows.Forms.TabPage();
             this.tabLessons = new System.Windows.Forms.TabPage();
             this.tabCodeBlocks = new System.Windows.Forms.TabPage();
 
-            
+
             this.pnlChapterList = new System.Windows.Forms.Panel();
             this.lblChapterList = new System.Windows.Forms.Label();
             this.lstChapters = new System.Windows.Forms.ListBox();
@@ -44,7 +44,7 @@
             this.btnChSave = new System.Windows.Forms.Button();
             this.btnChDelete = new System.Windows.Forms.Button();
 
-            
+
             this.pnlTopicFilter = new System.Windows.Forms.Panel();
             this.lblTopicChFilter = new System.Windows.Forms.Label();
             this.cmbTopicChapter = new System.Windows.Forms.ComboBox();
@@ -63,7 +63,7 @@
             this.btnTopSave = new System.Windows.Forms.Button();
             this.btnTopDelete = new System.Windows.Forms.Button();
 
-            
+
             this.pnlLessonFilter = new System.Windows.Forms.Panel();
             this.lblLessonTopFilter = new System.Windows.Forms.Label();
             this.cmbLessonTopic = new System.Windows.Forms.ComboBox();
@@ -82,7 +82,7 @@
             this.btnLesSave = new System.Windows.Forms.Button();
             this.btnLesDelete = new System.Windows.Forms.Button();
 
-            
+
             this.pnlCodeFilter = new System.Windows.Forms.Panel();
             this.lblCodeLesFilter = new System.Windows.Forms.Label();
             this.cmbCodeLesson = new System.Windows.Forms.ComboBox();
@@ -103,9 +103,9 @@
             this.btnCodeSave = new System.Windows.Forms.Button();
             this.btnCodeDelete = new System.Windows.Forms.Button();
 
-            
-            
-            
+
+
+
             this.pnlTopBar.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tabChapters.SuspendLayout();
@@ -118,9 +118,9 @@
             ((System.ComponentModel.ISupportInitialize)this.numCodeOrder).BeginInit();
             this.SuspendLayout();
 
-            
-            
-            
+
+
+
             this.pnlTopBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopBar.Height = 60;
             this.pnlTopBar.Name = "pnlTopBar";
@@ -151,9 +151,9 @@
             this.btnBackToMain.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBackToMain.Click += new System.EventHandler(this.btnBackToMain_Click);
 
-            
-            
-            
+
+
+
             this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabMain.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.tabMain.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
@@ -164,16 +164,16 @@
                 this.tabChapters, this.tabTopics, this.tabLessons, this.tabCodeBlocks });
             this.tabMain.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.TabMain_DrawItem);
 
-            
-            
-            
+
+
+
             this.tabChapters.BackColor = System.Drawing.Color.FromArgb(240, 244, 249);
             this.tabChapters.Name = "tabChapters";
             this.tabChapters.Text = "📚 Главы";
             this.tabChapters.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.pnlChapterList, this.pnlChapterForm, this.pnlChapterBtns });
 
-            
+
             this.pnlChapterList.Location = new System.Drawing.Point(10, 10);
             this.pnlChapterList.Size = new System.Drawing.Size(280, 470);
             this.pnlChapterList.BackColor = System.Drawing.Color.Transparent;
@@ -197,7 +197,7 @@
             this.lstChapters.Name = "lstChapters";
             this.lstChapters.SelectedIndexChanged += new System.EventHandler(this.lstChapters_SelectedIndexChanged);
 
-            
+
             this.pnlChapterForm.Location = new System.Drawing.Point(310, 10);
             this.pnlChapterForm.Size = new System.Drawing.Size(760, 300);
             this.pnlChapterForm.BackColor = System.Drawing.Color.White;
@@ -208,7 +208,7 @@
                 this.lblChCoverUrl, this.txtChCoverUrl,
                 this.lblChOrder, this.numChOrder });
 
-            
+
             SetupLabel(this.lblChTitle, "Название", new System.Drawing.Point(14, 12));
             SetupTextBox(this.txtChTitle, "txtChTitle", new System.Drawing.Point(14, 32), new System.Drawing.Size(730, 26));
 
@@ -221,7 +221,7 @@
             SetupLabel(this.lblChOrder, "Порядок (#)", new System.Drawing.Point(14, 208));
             SetupNumeric(this.numChOrder, "numChOrder", new System.Drawing.Point(14, 228));
 
-            
+
             this.pnlChapterBtns.Location = new System.Drawing.Point(310, 318);
             this.pnlChapterBtns.Size = new System.Drawing.Size(500, 40);
             this.pnlChapterBtns.BackColor = System.Drawing.Color.Transparent;
@@ -237,16 +237,16 @@
             this.btnChSave.Click += new System.EventHandler(this.btnChSave_Click);
             this.btnChDelete.Click += new System.EventHandler(this.btnChDelete_Click);
 
-            
-            
-            
+
+
+
             this.tabTopics.BackColor = System.Drawing.Color.FromArgb(240, 244, 249);
             this.tabTopics.Name = "tabTopics";
             this.tabTopics.Text = "📑 Темы";
             this.tabTopics.Controls.AddRange(new System.Windows.Forms.Control[] {
                 this.pnlTopicFilter, this.pnlTopicList, this.pnlTopicForm, this.pnlTopicBtns });
 
-            
+
             this.pnlTopicFilter.Location = new System.Drawing.Point(10, 10);
             this.pnlTopicFilter.Size = new System.Drawing.Size(600, 36);
             this.pnlTopicFilter.BackColor = System.Drawing.Color.Transparent;
@@ -258,7 +258,7 @@
             SetupCombo(this.cmbTopicChapter, "cmbTopicChapter", new System.Drawing.Point(56, 4));
             this.cmbTopicChapter.SelectedIndexChanged += new System.EventHandler(this.cmbTopicChapter_SelectedIndexChanged);
 
-            
+
             this.pnlTopicList.Location = new System.Drawing.Point(10, 54);
             this.pnlTopicList.Size = new System.Drawing.Size(280, 426);
             this.pnlTopicList.BackColor = System.Drawing.Color.Transparent;
@@ -270,7 +270,7 @@
             SetupListBox(this.lstTopics, "lstTopics");
             this.lstTopics.SelectedIndexChanged += new System.EventHandler(this.lstTopics_SelectedIndexChanged);
 
-            
+
             this.pnlTopicForm.Location = new System.Drawing.Point(310, 54);
             this.pnlTopicForm.Size = new System.Drawing.Size(760, 260);
             this.pnlTopicForm.BackColor = System.Drawing.Color.White;
@@ -287,7 +287,7 @@
             SetupLabel(this.lblTopOrder, "Порядок (#)", new System.Drawing.Point(14, 154));
             SetupNumeric(this.numTopOrder, "numTopOrder", new System.Drawing.Point(14, 174));
 
-            
+
             this.pnlTopicBtns.Location = new System.Drawing.Point(310, 322);
             this.pnlTopicBtns.Size = new System.Drawing.Size(500, 40);
             this.pnlTopicBtns.BackColor = System.Drawing.Color.Transparent;
@@ -303,9 +303,9 @@
             this.btnTopSave.Click += new System.EventHandler(this.btnTopSave_Click);
             this.btnTopDelete.Click += new System.EventHandler(this.btnTopDelete_Click);
 
-            
-            
-            
+
+
+
             this.tabLessons.BackColor = System.Drawing.Color.FromArgb(240, 244, 249);
             this.tabLessons.Name = "tabLessons";
             this.tabLessons.Text = "📝 Уроки";
@@ -366,9 +366,9 @@
             this.btnLesSave.Click += new System.EventHandler(this.btnLesSave_Click);
             this.btnLesDelete.Click += new System.EventHandler(this.btnLesDelete_Click);
 
-            
-            
-            
+
+
+
             this.tabCodeBlocks.BackColor = System.Drawing.Color.FromArgb(240, 244, 249);
             this.tabCodeBlocks.Name = "tabCodeBlocks";
             this.tabCodeBlocks.Text = "💻 Задания";
@@ -436,15 +436,16 @@
             this.btnCodeSave.Click += new System.EventHandler(this.btnCodeSave_Click);
             this.btnCodeDelete.Click += new System.EventHandler(this.btnCodeDelete_Click);
 
-            
-            
-            
+
+
+
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(240, 244, 249);
             this.ClientSize = new System.Drawing.Size(1100, 720);
             this.Font = new System.Drawing.Font("Segoe UI", 9.5F);
             this.MinimumSize = new System.Drawing.Size(900, 600);
+            this.Icon = (Icon)resources.GetObject("$this.Icon");
             this.Name = "AdminForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Панель администратора — Управление контентом";
@@ -452,9 +453,9 @@
             this.Controls.Add(this.pnlTopBar);
             this.Load += new System.EventHandler(this.AdminForm_Load);
 
-            
-            
-            
+
+
+
             ((System.ComponentModel.ISupportInitialize)this.numChOrder).EndInit();
             ((System.ComponentModel.ISupportInitialize)this.numTopOrder).EndInit();
             ((System.ComponentModel.ISupportInitialize)this.numLesOrder).EndInit();
@@ -471,9 +472,9 @@
 
         #endregion
 
-        
-        
-        
+
+
+
         private static void SetupLabel(System.Windows.Forms.Label lbl, string text, System.Drawing.Point loc)
         {
             lbl.AutoSize = true;
@@ -569,9 +570,9 @@
             btn.FlatAppearance.BorderSize = 0;
         }
 
-        
-        
-        
+
+
+
         private AdminTopBar pnlTopBar;
         private System.Windows.Forms.Label lblAdminTitle;
         private System.Windows.Forms.Button btnBackToMain;
@@ -581,7 +582,7 @@
         private System.Windows.Forms.TabPage tabLessons;
         private System.Windows.Forms.TabPage tabCodeBlocks;
 
-        
+
         private System.Windows.Forms.Panel pnlChapterList, pnlChapterForm, pnlChapterBtns;
         private System.Windows.Forms.Label lblChapterList, lblChTitle, lblChDesc, lblChCoverUrl, lblChOrder;
         private System.Windows.Forms.ListBox lstChapters;
@@ -589,7 +590,7 @@
         private System.Windows.Forms.NumericUpDown numChOrder;
         private System.Windows.Forms.Button btnChAdd, btnChSave, btnChDelete;
 
-        
+
         private System.Windows.Forms.Panel pnlTopicFilter, pnlTopicList, pnlTopicForm, pnlTopicBtns;
         private System.Windows.Forms.Label lblTopicChFilter, lblTopicList, lblTopTitle, lblTopDesc, lblTopOrder;
         private System.Windows.Forms.ComboBox cmbTopicChapter;
@@ -598,7 +599,7 @@
         private System.Windows.Forms.NumericUpDown numTopOrder;
         private System.Windows.Forms.Button btnTopAdd, btnTopSave, btnTopDelete;
 
-        
+
         private System.Windows.Forms.Panel pnlLessonFilter, pnlLessonList, pnlLessonForm, pnlLessonBtns;
         private System.Windows.Forms.Label lblLessonTopFilter, lblLessonList, lblLesTitle, lblLesContent, lblLesOrder;
         private System.Windows.Forms.ComboBox cmbLessonTopic;
@@ -607,7 +608,7 @@
         private System.Windows.Forms.NumericUpDown numLesOrder;
         private System.Windows.Forms.Button btnLesAdd, btnLesSave, btnLesDelete;
 
-        
+
         private System.Windows.Forms.Panel pnlCodeFilter, pnlCodeList, pnlCodeForm, pnlCodeBtns;
         private System.Windows.Forms.Label lblCodeLesFilter, lblCodeList, lblCode, lblExpected, lblLang, lblCodeOrder;
         private System.Windows.Forms.ComboBox cmbCodeLesson;

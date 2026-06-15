@@ -31,6 +31,7 @@ namespace CSharpDesctop.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProfileForm));
             picAvatar = new PictureBox();
             btnChangeAvatar = new RoundedButton();
             lblUserLogin = new Label();
@@ -294,6 +295,7 @@ namespace CSharpDesctop.Forms
             Controls.Add(btnReset);
             Controls.Add(btnAboutApp);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "ProfileForm";
             StartPosition = FormStartPosition.CenterParent;

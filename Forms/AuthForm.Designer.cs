@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Resources;
 using System.Windows.Forms;
 
 namespace CSharpDesctop.Forms
@@ -38,6 +39,8 @@ namespace CSharpDesctop.Forms
 
         private void InitializeComponent()
         {
+            var resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthForm));
+
             components = new System.ComponentModel.Container();
 
             // --- Левая часть: брендинг ---
@@ -262,6 +265,7 @@ namespace CSharpDesctop.Forms
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "AuthForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "C# Manual — Авторизация";

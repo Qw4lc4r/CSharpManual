@@ -22,6 +22,7 @@ namespace CSharpDesctop.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             pnlTopBar = new GradientTopBar();
             button1 = new Button();
             btnAdminPanel = new Button();
@@ -129,6 +130,7 @@ namespace CSharpDesctop.Forms
             ClientSize = new Size(947, 562);
             Controls.Add(pnlFlowGrid);
             Controls.Add(pnlTopBar);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "C# Manual — Электронное пособие";

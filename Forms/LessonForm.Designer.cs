@@ -286,6 +286,7 @@ namespace CSharpDesctop.Forms
             fctbEditor.CharWidth = 8;
             fctbEditor.DisabledColor = Color.FromArgb(100, 180, 180, 180);
             fctbEditor.Font = new Font("Consolas", 11F);
+            fctbEditor.Hotkeys = resources.GetString("fctbEditor.Hotkeys");
             fctbEditor.IsReplaceMode = false;
             fctbEditor.Location = new Point(3, 42);
             fctbEditor.Name = "fctbEditor";
@@ -315,6 +316,7 @@ namespace CSharpDesctop.Forms
             ClientSize = new Size(1280, 720);
             Controls.Add(splitContainerMain);
             Controls.Add(pnlTopBar);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LessonForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "C# Manual — Урок";
