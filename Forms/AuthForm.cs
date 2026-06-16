@@ -17,6 +17,11 @@ namespace CSharpDesctop.Forms
         private int _animationStep = 0;
         private const int TotalSteps = 54;
 
+        private static readonly string[] BannedWords = new[]
+        {
+            "admin", "administrator", "root", "fuck", "shit", "bitch", "asshole",
+            "идиот", "дурак", "сука", "блять", "хуй", "пизда", "ебать"
+        };
 
         public AuthForm()
         {
@@ -134,13 +139,18 @@ namespace CSharpDesctop.Forms
             string password = txtRegPassword.Text;
             string confirm = txtRegPasswordConfirm.Text;
 
+            // ── Валидация полей ────────────────────────────────────────────
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(name) || string.IsNullOrEmpty(email))
             {
                 MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-
+            if (ContainsBannedWord(name) || ContainsBannedWord(login))
+            {
+                MessageBox.Show("Имя или логин содержит недопустимые слова!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             if (!IsValidEmail(email))
             {
@@ -148,23 +158,89 @@ namespace CSharpDesctop.Forms
                 return;
             }
 
+            // Блокируем кнопку перед асинхронными запросами к сети/БД
+            btnRegisterSubmit.Enabled = false;
+            btnRegisterSubmit.Text = "⏳ Проверка данных…";
+
+            // ── НОВАЯ ПРОВЕРКА: Существует ли email в Supabase ─────────────
+            try
+            {
+                // Передаем null, так как это регистрация нового пользователя (нет текущего ID)
+                bool isEmailTaken = await DatabaseHelper.IsEmailExistsAsync(email, null);
+                if (isEmailTaken)
+                {
+                    MessageBox.Show("Пользователь с таким email уже зарегистрирован!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    btnRegisterSubmit.Enabled = true;
+                    btnRegisterSubmit.Text = "Зарегистрироваться";
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Если база упала, лучше сообщить, а не пускать регистрироваться вслепую
+                MessageBox.Show($"Ошибка связи с базой данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnRegisterSubmit.Enabled = true;
+                btnRegisterSubmit.Text = "Зарегистрироваться";
+                return;
+            }
+
             if (password.Length < 8)
             {
                 MessageBox.Show("Пароль должен быть не менее 8 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegisterSubmit.Enabled = true;
+                btnRegisterSubmit.Text = "Зарегистрироваться";
                 return;
             }
 
             if (password != confirm)
             {
-                MessageBox.Show("Пароли не совпадают!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Пароль не совпадают!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                btnRegisterSubmit.Enabled = true;
+                btnRegisterSubmit.Text = "Зарегистрироваться";
                 return;
             }
 
+            // ── Шаг 1: Подтверждение email ПЕРЕД регистрацией ─────────────
+            btnRegisterSubmit.Text = "⏳ Отправляем код…";
+
+            using (var verifyForm = new EmailVerificationForm(email, "регистрации"))
+            {
+                verifyForm.Owner = this;
+                var result = verifyForm.ShowDialog(this);
+
+                if (result != DialogResult.OK || !verifyForm.Verified)
+                {
+                    // Пользователь закрыл форму или исчерпал попытки
+                    btnRegisterSubmit.Enabled = true;
+                    btnRegisterSubmit.Text = "Зарегистрироваться";
+                    return;
+                }
+            }
+
+            // ── Шаг 2: Регистрация в БД (email подтверждён) ───────────────
+            btnRegisterSubmit.Text = "⏳ Регистрируем…";
+
             if (await DatabaseHelper.RegisterAsync(login, name, email, password))
             {
-                MessageBox.Show("Регистрация успешна!");
+                MessageBox.Show(
+                    "🎉 Регистрация успешна!\nТеперь войдите в аккаунт.",
+                    "Успех",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
                 lblLoginLink_Click(this, EventArgs.Empty);
             }
+            else
+            {
+                MessageBox.Show(
+                    "Ошибка при создании аккаунта.\nВозможно, логин уже используется.",
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            btnRegisterSubmit.Enabled = true;
+            btnRegisterSubmit.Text = "Зарегистрироваться";
         }
 
         private void btnGuest_Click(object sender, EventArgs e)
@@ -177,7 +253,12 @@ namespace CSharpDesctop.Forms
             OpenMainForm();
         }
 
-
+        private static bool ContainsBannedWord(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return false;
+            string lower = text.ToLowerInvariant();
+            return BannedWords.Any(word => lower.Contains(word));
+        }
 
         private static bool IsValidEmail(string email)
         {
@@ -244,20 +325,25 @@ namespace CSharpDesctop.Forms
             }
             catch
             {
-
                 return Environment.MachineName;
             }
         }
-        private void btnShowPassword_Click(object sender, EventArgs e) => txtPassword.UseSystemPasswordChar = !txtPassword.UseSystemPasswordChar;
-        private void OpenMainForm() { tmrAnimation.Stop(); new MainForm().Show(); this.Hide(); }
+
+        private void btnShowPassword_Click(object sender, EventArgs e) =>
+            txtPassword.UseSystemPasswordChar = !txtPassword.UseSystemPasswordChar;
+
+        private void OpenMainForm()
+        {
+            tmrAnimation.Stop();
+            new MainForm().Show();
+            this.Hide();
+        }
 
         private async void AuthForm_Load(object sender, EventArgs e)
         {
-
             if (System.IO.File.Exists("session.cfg"))
             {
                 string savedGuid = GetMachineGuid();
-
 
                 this.Enabled = false;
 
@@ -272,6 +358,7 @@ namespace CSharpDesctop.Forms
                 try { System.IO.File.Delete("session.cfg"); } catch { }
             }
         }
+
         private void label9_Click(object sender, EventArgs e) { }
 
         private void button1_Click(object sender, EventArgs e)

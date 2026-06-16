@@ -385,9 +385,10 @@ namespace CSharpDesctop.Forms
             MessageBox.Show(msg, "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
     }
 
-    
-    
-    
+
+    //mavv grkv adlq qdpi
+
+
     internal class AdminTopBar : Panel
     {
         public AdminTopBar()

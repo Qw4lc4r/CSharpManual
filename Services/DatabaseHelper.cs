@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using CSharpDesctop.Models;
+using System.Net.Mail;
+using System.Net.NetworkInformation;
+using Supabase.Postgrest;
+using System.Net.Sockets;
 
 namespace CSharpDesctop.Models
 {
@@ -552,23 +556,93 @@ namespace CSharpDesctop.Services
             await SendRequestAsync(HttpMethod.Delete, $"{BaseUrl}/test_results?user_id=eq.{UserSession.UserId.Value}");
             await SendRequestAsync(HttpMethod.Delete, $"{BaseUrl}/user_progress?user_id=eq.{UserSession.UserId.Value}");
         }
+        public static async Task<bool> IsEmailDomainValidAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+
+            try
+            {
+                // 1. Проверяем синтаксис через встроенный класс .NET
+                var mailAddress = new MailAddress(email);
+                string host = mailAddress.Host; // Получаем домен, например "gmail.com"
+
+                // 2. Делаем DNS-запрос, чтобы проверить, существуют ли для этого домена IP-адреса.
+                // Если домен фейковый (например, @gmaaaail.commm), упадет исключение.
+                var addresses = await System.Net.Dns.GetHostAddressesAsync(host);
+
+                return addresses.Length > 0;
+            }
+            catch
+            {
+                // Если упало исключение — синтаксис битый или домена не существует в сети
+                return false;
+            }
+        }
+        public static async Task<bool> IsEmailExistsAsync(string email, Guid? currentUserId)
+        {
+            try
+            {
+                // Формируем URL с фильтрацией по email
+                string url = $"{BaseUrl}/users?email=eq.{Uri.EscapeDataString(email)}";
+
+                // Если редактируется существующий профиль, исключаем его ID из поиска
+                if (currentUserId.HasValue)
+                {
+                    url += $"&id=neq.{currentUserId.Value}";
+                }
+
+                url += "&limit=1";
+
+                string jsonResponse = await SendRequestAsync(HttpMethod.Get, url);
+
+                // Если сервер вернул пустой массив или null, значит email свободен
+                if (string.IsNullOrEmpty(jsonResponse) || jsonResponse.Trim() == "[]" || jsonResponse.Trim() == "null")
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Ошибка при проверке email: {ex.Message}");
+                // В случае ошибки безопаснее вернуть true, чтобы не перезаписать чужие данные
+                return true;
+            }
+        }
         public static async Task<bool> UpdateUserProfileAsync(string newName, string newEmail)
         {
             if (UserSession.UserId == null) return false;
 
             try
             {
-                
-                var body = new { name = newName, email = newEmail };
+                // Передаем параметры, которые ожидает функция в БД
+                var body = new
+                {
+                    p_user_id = UserSession.UserId.Value,
+                    p_new_name = newName,
+                    p_new_email = newEmail
+                };
+
                 string jsonBody = JsonSerializer.Serialize(body);
 
-                string url = $"{BaseUrl}/users?id=eq.{UserSession.UserId.Value}";
+                // URL для вызова хранимой функции через RPC
+                string url = $"{BaseUrl}/rpc/update_user_profile";
 
-                var response = await SendRequestAsync(HttpMethod.Patch, url, jsonBody);
-                return response != null;
+                // Для RPC запросов используется POST
+                var response = await SendRequestAsync(HttpMethod.Post, url, jsonBody);
+
+                if (response == null) return false;
+
+                // По желанию: функция возвращает true/false. 
+                // Если ваш SendRequestAsync возвращает строку ответа, можно проверить её:
+                // return response.Contains("true");
+
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                // Логирование ошибки (ex.Message) очень помогло бы при отладке
                 return false;
             }
         }
